@@ -1,0 +1,81 @@
+{
+  "result": "PASS",
+  "database": "MySQL 8.0.46, port 3307",
+  "customerId": 2,
+  "productId": 3,
+  "orderId": 2,
+  "checks": [
+    {
+      "path": "/customers",
+      "status": 201,
+      "response": {
+        "id": 2,
+        "name": "Khach Thu MySQL",
+        "email": "mysql1792153655557454200@example.com",
+        "address": "123 Nguyen Trai, TP HCM"
+      }
+    },
+    {
+      "path": "/products",
+      "status": 201,
+      "response": {
+        "id": 3,
+        "name": "Ban phim MySQL",
+        "description": "San pham kiem thu MySQL",
+        "price": 750000,
+        "stock": 10
+      }
+    },
+    {
+      "path": "/orders",
+      "status": 201,
+      "response": {
+        "id": 2,
+        "customerId": 2,
+        "status": "PENDING",
+        "createdAt": "2026-10-16T12:27:36.7604684Z",
+        "total": 1500000.0,
+        "items": [
+          {
+            "productId": 3,
+            "productName": "Ban phim MySQL",
+            "quantity": 2,
+            "unitPrice": 750000.0,
+            "subtotal": 1500000.0
+          }
+        ]
+      }
+    },
+    {
+      "path": "/products/3",
+      "status": 200,
+      "response": {
+        "id": 3,
+        "name": "Ban phim MySQL",
+        "description": "San pham kiem thu MySQL",
+        "price": 750000.0,
+        "stock": 8
+      }
+    },
+    {
+      "path": "/orders/2",
+      "status": 200,
+      "response": {
+        "id": 2,
+        "customerId": 2,
+        "status": "PENDING",
+        "createdAt": "2026-10-16T12:27:36.760468Z",
+        "total": 1500000.0,
+        "items": [
+          {
+            "productId": 3,
+            "productName": "Ban phim MySQL",
+            "quantity": 2,
+            "unitPrice": 750000.0,
+            "subtotal": 1500000.0
+          }
+        ]
+      }
+    }
+  ]
+}

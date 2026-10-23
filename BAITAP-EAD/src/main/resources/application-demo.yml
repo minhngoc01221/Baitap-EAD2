@@ -1,0 +1,10 @@
+# Profile demo dùng H2 trong RAM: chạy thử không cần MySQL, dữ liệu mất khi dừng ứng dụng.
+spring:
+  datasource:
+    url: jdbc:h2:mem:shop;MODE=MySQL;DB_CLOSE_DELAY=-1
+    username: sa
+    password: ''
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop

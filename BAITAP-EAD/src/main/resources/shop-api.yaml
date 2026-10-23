@@ -1,0 +1,2810 @@
+# Single Source of Truth: OpenAPI fullstack.
+openapi: 3.0.3
+info:
+  title: Shop API
+  version: 2.0.0
+  description: >-
+    Fullstack Shop API. Authentication uses expiring Bearer sessions. Customer access is limited to own profile/orders;
+    administrators manage catalog and order status. PENDING -> PAID -> SHIPPED; cancel from PENDING or PAID, restoring
+    stock. Money: VND.
+servers:
+  - url: 'http://localhost:8080/api/v1'
+    description: Spring Boot
+  - url: 'http://localhost:4010'
+    description: 'Prism mock (paths start at /customers, /products, /orders)'
+tags:
+  - name: Accounts
+  - name: Categories
+  - name: Customers
+  - name: Products
+  - name: Orders
+paths:
+  /customers:
+    get:
+      tags:
+        - Customers
+      operationId: listCustomers
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerPage'
+              example:
+                content:
+                  - id: 1
+                    name: Nguyen Van An
+                    email: demo@shop.local
+                    address: '123 Nguyen Trai, TP HCM'
+                    phone: "0901234567"
+                page: 0
+                size: 10
+                totalElements: 1
+                totalPages: 1
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: VALIDATION_ERROR
+                message: Invalid request
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: NOT_FOUND
+                message: Resource not found
+                details: []
+        '422':
+          description: Business rule violated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Business rule violated
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            default: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 100
+            default: 10
+        - name: sort
+          in: query
+          description: 'One allowed field and asc/desc; e.g. price,desc. Default id,asc.'
+          schema:
+            type: string
+            default: 'id,asc'
+            example: 'id,asc'
+    post:
+      tags:
+        - Customers
+      operationId: createCustomer
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+              example:
+                id: 1
+                name: Nguyen Van An
+                email: demo@shop.local
+                address: '123 Nguyen Trai, TP HCM'
+                phone: "0901234567"
+          headers:
+            Location:
+              description: URL of created resource
+              schema:
+                type: string
+                format: uri
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: VALIDATION_ERROR
+                message: Invalid request
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: NOT_FOUND
+                message: Resource not found
+                details: []
+        '422':
+          description: Business rule violated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Business rule violated
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerInput'
+  '/customers/{id}':
+    get:
+      tags:
+        - Customers
+      operationId: getCustomer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+              example:
+                id: 1
+                name: Nguyen Van An
+                email: demo@shop.local
+                address: '123 Nguyen Trai, TP HCM'
+                phone: "0901234567"
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: VALIDATION_ERROR
+                message: Invalid request
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: NOT_FOUND
+                message: Resource not found
+                details: []
+        '422':
+          description: Business rule violated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Business rule violated
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+    put:
+      tags:
+        - Customers
+      operationId: updateCustomer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+              example:
+                id: 1
+                name: Nguyen Van An
+                email: demo@shop.local
+                address: '123 Nguyen Trai, TP HCM'
+                phone: "0901234567"
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: VALIDATION_ERROR
+                message: Invalid request
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: NOT_FOUND
+                message: Resource not found
+                details: []
+        '422':
+          description: Business rule violated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Business rule violated
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerInput'
+    delete:
+      tags:
+        - Customers
+      operationId: deleteCustomer
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: VALIDATION_ERROR
+                message: Invalid request
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: NOT_FOUND
+                message: Resource not found
+                details: []
+        '422':
+          description: Business rule violated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Business rule violated
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+  /products:
+    get:
+      tags:
+        - Products
+      operationId: listProducts
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductPage'
+              example:
+                content:
+                  - id: 1
+                    name: Nova Mechanical K75
+                    description: Ban phim co khong day
+                    price: 750000
+                    stock: 30
+                    categoryId: 1
+                    categoryName: Ban phim
+                    imageUrl: /images/keyboard.svg
+                page: 0
+                size: 10
+                totalElements: 1
+                totalPages: 1
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: VALIDATION_ERROR
+                message: Invalid request
+                details: []
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: NOT_FOUND
+                message: Resource not found
+                details: []
+        '422':
+          description: Business rule violated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Business rule violated
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            default: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 100
+            default: 10
+        - name: sort
+          in: query
+          description: 'One allowed field and asc/desc; e.g. price,desc. Default id,asc.'
+          schema:
+            type: string
+            default: 'id,asc'
+            example: 'id,asc'
+        - name: q
+          in: query
+          schema:
+            type: string
+            maxLength: 150
+        - name: categoryId
+          in: query
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+        - name: minPrice
+          in: query
+          schema:
+            type: number
+            minimum: 0
+        - name: maxPrice
+          in: query
+          schema:
+            type: number
+            minimum: 0
+      security: []
+    post:
+      tags:
+        - Products
+      operationId: createProduct
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+              example:
+                id: 1
+                name: Nova Mechanical K75
+                description: Ban phim co khong day
+                price: 750000
+                stock: 30
+                categoryId: 1
+                categoryName: Ban phim
+                imageUrl: /images/keyboard.svg
+          headers:
+            Location:
+              description: URL of created resource
+              schema:
+                type: string
+                format: uri
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: VALIDATION_ERROR
+                message: Invalid request
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: NOT_FOUND
+                message: Resource not found
+                details: []
+        '422':
+          description: Business rule violated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Business rule violated
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput'
+  '/products/{id}':
+    get:
+      tags:
+        - Products
+      operationId: getProduct
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+              example:
+                id: 1
+                name: Nova Mechanical K75
+                description: Ban phim co khong day
+                price: 750000
+                stock: 30
+                categoryId: 1
+                categoryName: Ban phim
+                imageUrl: /images/keyboard.svg
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: VALIDATION_ERROR
+                message: Invalid request
+                details: []
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: NOT_FOUND
+                message: Resource not found
+                details: []
+        '422':
+          description: Business rule violated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Business rule violated
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      security: []
+    put:
+      tags:
+        - Products
+      operationId: updateProduct
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+              example:
+                id: 1
+                name: Nova Mechanical K75
+                description: Ban phim co khong day
+                price: 750000
+                stock: 30
+                categoryId: 1
+                categoryName: Ban phim
+                imageUrl: /images/keyboard.svg
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: VALIDATION_ERROR
+                message: Invalid request
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: NOT_FOUND
+                message: Resource not found
+                details: []
+        '422':
+          description: Business rule violated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Business rule violated
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput'
+    delete:
+      tags:
+        - Products
+      operationId: deleteProduct
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: VALIDATION_ERROR
+                message: Invalid request
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: NOT_FOUND
+                message: Resource not found
+                details: []
+        '422':
+          description: Business rule violated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Business rule violated
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+  '/customers/{id}/orders':
+    get:
+      tags:
+        - Customers
+      operationId: listCustomerOrders
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderPage'
+              example:
+                content:
+                  - id: 1
+                    customerId: 1
+                    status: PENDING
+                    createdAt: '2026-10-16T09:00:00Z'
+                    total: 1500000
+                    items:
+                      - productId: 1
+                        productName: Nova Mechanical K75
+                        quantity: 2
+                        unitPrice: 750000
+                        subtotal: 1500000
+                page: 0
+                size: 10
+                totalElements: 1
+                totalPages: 1
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: VALIDATION_ERROR
+                message: Invalid request
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: NOT_FOUND
+                message: Resource not found
+                details: []
+        '422':
+          description: Business rule violated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Business rule violated
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            default: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 100
+            default: 10
+        - name: sort
+          in: query
+          description: 'One allowed field and asc/desc; e.g. price,desc. Default id,asc.'
+          schema:
+            type: string
+            default: 'id,asc'
+            example: 'id,asc'
+  /orders:
+    get:
+      tags:
+        - Orders
+      operationId: listOrders
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderPage'
+              example:
+                content:
+                  - id: 1
+                    customerId: 1
+                    status: PENDING
+                    createdAt: '2026-10-16T09:00:00Z'
+                    total: 1500000
+                    items:
+                      - productId: 1
+                        productName: Nova Mechanical K75
+                        quantity: 2
+                        unitPrice: 750000
+                        subtotal: 1500000
+                page: 0
+                size: 10
+                totalElements: 1
+                totalPages: 1
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: VALIDATION_ERROR
+                message: Invalid request
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: NOT_FOUND
+                message: Resource not found
+                details: []
+        '422':
+          description: Business rule violated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Business rule violated
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            default: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 100
+            default: 10
+        - name: sort
+          in: query
+          description: 'One allowed field and asc/desc; e.g. price,desc. Default id,asc.'
+          schema:
+            type: string
+            default: 'id,asc'
+            example: 'id,asc'
+    post:
+      tags:
+        - Orders
+      operationId: createOrder
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+              example:
+                id: 1
+                customerId: 1
+                status: PENDING
+                createdAt: '2026-10-16T09:00:00Z'
+                total: 1500000
+                items:
+                  - productId: 1
+                    productName: Nova Mechanical K75
+                    quantity: 2
+                    unitPrice: 750000
+                    subtotal: 1500000
+          headers:
+            Location:
+              description: URL of created resource
+              schema:
+                type: string
+                format: uri
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: VALIDATION_ERROR
+                message: Invalid request
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: NOT_FOUND
+                message: Resource not found
+                details: []
+        '422':
+          description: Business rule violated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Business rule violated
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderInput'
+  '/orders/{id}':
+    get:
+      tags:
+        - Orders
+      operationId: getOrder
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+              example:
+                id: 1
+                customerId: 1
+                status: PENDING
+                createdAt: '2026-10-16T09:00:00Z'
+                total: 1500000
+                items:
+                  - productId: 1
+                    productName: Nova Mechanical K75
+                    quantity: 2
+                    unitPrice: 750000
+                    subtotal: 1500000
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: VALIDATION_ERROR
+                message: Invalid request
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: NOT_FOUND
+                message: Resource not found
+                details: []
+        '422':
+          description: Business rule violated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Business rule violated
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+    patch:
+      tags:
+        - Orders
+      operationId: updateOrderStatus
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+              example:
+                id: 1
+                customerId: 1
+                status: PENDING
+                createdAt: '2026-10-16T09:00:00Z'
+                total: 1500000
+                items:
+                  - productId: 1
+                    productName: Nova Mechanical K75
+                    quantity: 2
+                    unitPrice: 750000
+                    subtotal: 1500000
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: VALIDATION_ERROR
+                message: Invalid request
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: NOT_FOUND
+                message: Resource not found
+                details: []
+        '422':
+          description: Business rule violated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Business rule violated
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderStatusInput'
+  /registrations:
+    post:
+      tags:
+        - Accounts
+      operationId: register
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSession'
+              example:
+                token: mock-session-token
+                customer:
+                  id: 1
+                  name: Nguyen Van An
+                  email: demo@shop.local
+                  address: '123 Nguyen Trai, TP HCM'
+                  phone: "0901234567"
+                role: ADMIN
+                expiresAt: '2026-12-31T23:59:59Z'
+          headers:
+            Location:
+              schema:
+                type: string
+              description: Created resource URL
+        '400':
+          description: Error 400
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Error 404
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '422':
+          description: Error 422
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+  /sessions:
+    post:
+      tags:
+        - Accounts
+      operationId: login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSession'
+              example:
+                token: mock-session-token
+                customer:
+                  id: 1
+                  name: Nguyen Van An
+                  email: demo@shop.local
+                  address: '123 Nguyen Trai, TP HCM'
+                  phone: "0901234567"
+                role: ADMIN
+                expiresAt: '2026-12-31T23:59:59Z'
+          headers:
+            Location:
+              schema:
+                type: string
+              description: Created resource URL
+        '400':
+          description: Error 400
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Error 404
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '422':
+          description: Error 422
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+    delete:
+      tags:
+        - Accounts
+      operationId: logout
+      responses:
+        '204':
+          description: Success
+        '400':
+          description: Error 400
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Error 404
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '422':
+          description: Error 422
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+  /profiles/current:
+    get:
+      tags:
+        - Accounts
+      operationId: getProfile
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+              example:
+                id: 1
+                name: Nguyen Van An
+                email: demo@shop.local
+                address: '123 Nguyen Trai, TP HCM'
+                phone: "0901234567"
+        '400':
+          description: Error 400
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Error 404
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '422':
+          description: Error 422
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+    put:
+      tags:
+        - Accounts
+      operationId: updateProfile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerInput'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+              example:
+                id: 1
+                name: Nguyen Van An
+                email: demo@shop.local
+                address: '123 Nguyen Trai, TP HCM'
+                phone: "0901234567"
+        '400':
+          description: Error 400
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Error 404
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '422':
+          description: Error 422
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+  /categories:
+    get:
+      tags:
+        - Categories
+      operationId: listCategories
+      security: []
+      responses:
+        '200':
+          description: Categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+              example:
+                - id: 1
+                  name: Ban phim
+                  description: Mechanical keyboards
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+    post:
+      tags:
+        - Categories
+      operationId: createCategory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+              example:
+                id: 1
+                name: Ban phim
+                description: Mechanical keyboards
+          headers:
+            Location:
+              schema:
+                type: string
+              description: Created resource URL
+        '400':
+          description: Error 400
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Error 404
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '422':
+          description: Error 422
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+  '/categories/{id}':
+    get:
+      tags:
+        - Categories
+      operationId: getCategory
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      security: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+              example:
+                id: 1
+                name: Ban phim
+                description: Mechanical keyboards
+        '400':
+          description: Error 400
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Error 404
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '422':
+          description: Error 422
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+    put:
+      tags:
+        - Categories
+      operationId: updateCategory
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryInput'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+              example:
+                id: 1
+                name: Ban phim
+                description: Mechanical keyboards
+        '400':
+          description: Error 400
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Error 404
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '422':
+          description: Error 422
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+    delete:
+      tags:
+        - Categories
+      operationId: deleteCategory
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      responses:
+        '204':
+          description: Success
+        '400':
+          description: Error 400
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Error 404
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '422':
+          description: Error 422
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+  '/products/{id}/stock':
+    patch:
+      tags:
+        - Products
+      operationId: updateProductStock
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockInput'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+              example:
+                id: 1
+                name: Nova Mechanical K75
+                description: Ban phim co khong day
+                price: 750000
+                stock: 30
+                categoryId: 1
+                categoryName: Ban phim
+                imageUrl: /images/keyboard.svg
+        '400':
+          description: Error 400
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '401':
+          description: Error 401
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: UNAUTHORIZED
+                message: Request could not be completed
+                details: []
+        '403':
+          description: Error 403
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: FORBIDDEN
+                message: Request could not be completed
+                details: []
+        '404':
+          description: Error 404
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '422':
+          description: Error 422
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: BUSINESS_RULE
+                message: Request could not be completed
+                details: []
+        '500':
+          description: Error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+              example:
+                code: INTERNAL_ERROR
+                message: Request could not be completed
+                details: []
+components:
+  schemas:
+    CustomerInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          example: Nguyen Van An
+        email:
+          type: string
+          format: email
+          minLength: 3
+          maxLength: 150
+          example: an@example.com
+        address:
+          type: string
+          minLength: 5
+          maxLength: 255
+          example: '123 Nguyen Trai, TP HCM'
+        phone:
+          type: string
+          example: "0901234567"
+          pattern: '^\+?[0-9]{9,15}$'
+          minLength: 9
+          maxLength: 16
+      required:
+        - name
+        - email
+        - address
+        - phone
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          minimum: 1
+          example: 1
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          example: Nguyen Van An
+        email:
+          type: string
+          format: email
+          minLength: 3
+          maxLength: 150
+          example: an@example.com
+        address:
+          type: string
+          minLength: 5
+          maxLength: 255
+          example: '123 Nguyen Trai, TP HCM'
+        phone:
+          type: string
+          example: "0901234567"
+          pattern: '^\+?[0-9]{9,15}$'
+          minLength: 9
+          maxLength: 16
+      required:
+        - id
+        - name
+        - email
+        - address
+        - phone
+    ProductInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 150
+          example: Ban phim co
+        description:
+          type: string
+          maxLength: 2000
+          example: Ban phim USB
+        price:
+          type: number
+          minimum: 0.01
+          maximum: 9999999999999.99
+          example: 750000
+        stock:
+          type: integer
+          format: int32
+          minimum: 0
+          example: 30
+        categoryId:
+          type: integer
+          format: int64
+          minimum: 1
+          example: 1
+        imageUrl:
+          type: string
+          example: /images/keyboard.svg
+          maxLength: 500
+          pattern: '^(/images/[a-z-]+\.svg|https://[^\s]+)$'
+      required:
+        - name
+        - price
+        - stock
+        - categoryId
+        - imageUrl
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          minimum: 1
+          example: 1
+        name:
+          type: string
+          minLength: 2
+          maxLength: 150
+          example: Ban phim co
+        description:
+          type: string
+          maxLength: 2000
+          example: Ban phim USB
+        price:
+          type: number
+          minimum: 0.01
+          maximum: 9999999999999.99
+          example: 750000
+        stock:
+          type: integer
+          format: int32
+          minimum: 0
+          example: 30
+        categoryId:
+          type: integer
+          format: int64
+          minimum: 1
+          example: 1
+        imageUrl:
+          type: string
+          example: /images/keyboard.svg
+          maxLength: 500
+          pattern: '^(/images/[a-z-]+\.svg|https://[^\s]+)$'
+        categoryName:
+          type: string
+          example: Ban phim
+      required:
+        - id
+        - name
+        - price
+        - stock
+        - categoryId
+        - imageUrl
+    OrderLineInput:
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int64
+          minimum: 1
+          example: 1
+        quantity:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 10000
+          example: 2
+      required:
+        - productId
+        - quantity
+    OrderInput:
+      type: object
+      properties:
+        customerId:
+          type: integer
+          format: int64
+          minimum: 1
+          example: 1
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderLineInput'
+          minItems: 1
+          maxItems: 100
+      required:
+        - customerId
+        - items
+    OrderStatusInput:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - PAID
+            - SHIPPED
+            - CANCELLED
+          example: PAID
+      required:
+        - status
+    OrderLine:
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int64
+          minimum: 1
+          example: 1
+        productName:
+          type: string
+          example: Ban phim co
+        quantity:
+          type: integer
+          format: int32
+          example: 2
+        unitPrice:
+          type: number
+          example: 750000
+        subtotal:
+          type: number
+          example: 1500000
+      required:
+        - productId
+        - productName
+        - quantity
+        - unitPrice
+        - subtotal
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          minimum: 1
+          example: 1
+        customerId:
+          type: integer
+          format: int64
+          minimum: 1
+          example: 1
+        status:
+          type: string
+          enum:
+            - PENDING
+            - PAID
+            - SHIPPED
+            - CANCELLED
+          example: PENDING
+        createdAt:
+          type: string
+          format: date-time
+          example: '2026-10-16T09:00:00Z'
+        total:
+          type: number
+          example: 1500000
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderLine'
+      required:
+        - id
+        - customerId
+        - status
+        - createdAt
+        - total
+        - items
+    ApiError:
+      type: object
+      properties:
+        code:
+          type: string
+          example: VALIDATION_ERROR
+        message:
+          type: string
+          example: Du lieu khong hop le
+        details:
+          type: array
+          items:
+            type: string
+          example:
+            - 'email: must be a well-formed email address'
+      required:
+        - code
+        - message
+        - details
+    CustomerPage:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Customer'
+        page:
+          type: integer
+          format: int32
+          example: 0
+        size:
+          type: integer
+          format: int32
+          example: 10
+        totalElements:
+          type: integer
+          format: int64
+          example: 1
+        totalPages:
+          type: integer
+          format: int32
+          example: 1
+      required:
+        - content
+        - page
+        - size
+        - totalElements
+        - totalPages
+    ProductPage:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        page:
+          type: integer
+          format: int32
+          example: 0
+        size:
+          type: integer
+          format: int32
+          example: 10
+        totalElements:
+          type: integer
+          format: int64
+          example: 1
+        totalPages:
+          type: integer
+          format: int32
+          example: 1
+      required:
+        - content
+        - page
+        - size
+        - totalElements
+        - totalPages
+    OrderPage:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+        page:
+          type: integer
+          format: int32
+          example: 0
+        size:
+          type: integer
+          format: int32
+          example: 10
+        totalElements:
+          type: integer
+          format: int64
+          example: 1
+        totalPages:
+          type: integer
+          format: int32
+          example: 1
+      required:
+        - content
+        - page
+        - size
+        - totalElements
+        - totalPages
+    RegistrationInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          example: Nguyen Van An
+        email:
+          type: string
+          format: email
+          minLength: 3
+          maxLength: 150
+          example: an@example.com
+        address:
+          type: string
+          minLength: 5
+          maxLength: 255
+          example: '123 Nguyen Trai, TP HCM'
+        phone:
+          type: string
+          example: "0901234567"
+          pattern: '^\+?[0-9]{9,15}$'
+          minLength: 9
+          maxLength: 16
+        password:
+          type: string
+          example: Customer123!
+          minLength: 8
+          maxLength: 64
+      required:
+        - name
+        - email
+        - address
+        - phone
+        - password
+    LoginInput:
+      type: object
+      properties:
+        email:
+          type: string
+          example: demo@shop.local
+          format: email
+        password:
+          type: string
+          example: Customer123!
+          minLength: 1
+          maxLength: 64
+      required:
+        - email
+        - password
+    AuthSession:
+      type: object
+      properties:
+        token:
+          type: string
+          example: mock-session-token
+        customer:
+          $ref: '#/components/schemas/Customer'
+        role:
+          type: string
+          example: CUSTOMER
+          enum:
+            - CUSTOMER
+            - ADMIN
+        expiresAt:
+          type: string
+          example: '2026-12-31T23:59:59Z'
+          format: date-time
+      required:
+        - token
+        - customer
+        - role
+        - expiresAt
+    CategoryInput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Ban phim
+          minLength: 2
+          maxLength: 100
+        description:
+          type: string
+          example: Mechanical keyboards
+          maxLength: 1000
+      required:
+        - name
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          minimum: 1
+          example: 1
+        name:
+          type: string
+          example: Ban phim
+          minLength: 2
+          maxLength: 100
+        description:
+          type: string
+          example: Mechanical keyboards
+          maxLength: 1000
+      required:
+        - id
+        - name
+    StockInput:
+      type: object
+      properties:
+        stock:
+          type: integer
+          format: int32
+          minimum: 0
+          example: 20
+      required:
+        - stock
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: POST /sessions to get an expiring session token.
+security:
+  - bearerAuth: []

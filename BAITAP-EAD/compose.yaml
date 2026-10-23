@@ -1,0 +1,25 @@
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: shop_api
+      MYSQL_USER: shop
+      MYSQL_PASSWORD: shop
+      MYSQL_ROOT_PASSWORD: root-local-only
+    ports:
+      - '3306:3306'
+    volumes:
+      - shop-data:/var/lib/mysql
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      interval: 5s
+      retries: 20
+  mock:
+    image: stoplight/prism:5
+    command: mock -h 0.0.0.0 /spec/shop-api.yaml
+    ports:
+      - '4010:4010'
+    volumes:
+      - ./src/main/resources/shop-api.yaml:/spec/shop-api.yaml:ro
+volumes:
+  shop-data:

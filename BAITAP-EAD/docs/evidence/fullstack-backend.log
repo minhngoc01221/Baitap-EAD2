@@ -1,0 +1,43 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.3)
+
+2026-10-16T20:25:00.780+07:00  INFO 5360 --- [shop-api] [           main] vn.edu.ead.shop.ShopApplication          : Starting ShopApplication v1.0.0 using Java 24.0.1 with PID 5360 (D:\SEM4\EAD\BAITAP-EAD\target\shop-api-1.0.0.jar started by ngocn in D:\SEM4\EAD\BAITAP-EAD)
+2026-10-16T20:25:00.783+07:00  INFO 5360 --- [shop-api] [           main] vn.edu.ead.shop.ShopApplication          : The following 1 profile is active: "mysql-local"
+2026-10-16T20:25:02.740+07:00  INFO 5360 --- [shop-api] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-10-16T20:25:02.905+07:00  INFO 5360 --- [shop-api] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 142 ms. Found 5 JPA repository interfaces.
+2026-10-16T20:25:04.190+07:00  INFO 5360 --- [shop-api] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-10-16T20:25:04.236+07:00  INFO 5360 --- [shop-api] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-16T20:25:04.236+07:00  INFO 5360 --- [shop-api] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.42]
+2026-10-16T20:25:04.312+07:00  INFO 5360 --- [shop-api] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-10-16T20:25:04.313+07:00  INFO 5360 --- [shop-api] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3434 ms
+2026-10-16T20:25:04.709+07:00  INFO 5360 --- [shop-api] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-10-16T20:25:04.888+07:00  INFO 5360 --- [shop-api] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.18.Final
+2026-10-16T20:25:04.994+07:00  INFO 5360 --- [shop-api] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-10-16T20:25:05.676+07:00  INFO 5360 --- [shop-api] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-10-16T20:25:05.766+07:00  INFO 5360 --- [shop-api] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-16T20:25:06.127+07:00  INFO 5360 --- [shop-api] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3386ed8
+2026-10-16T20:25:06.132+07:00  INFO 5360 --- [shop-api] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-10-16T20:25:06.299+07:00  INFO 5360 --- [shop-api] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.46
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-10-16T20:25:07.894+07:00  INFO 5360 --- [shop-api] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-10-16T20:25:08.055+07:00  INFO 5360 --- [shop-api] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-10-16T20:25:09.237+07:00  INFO 5360 --- [shop-api] [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-10-16T20:25:11.536+07:00  INFO 5360 --- [shop-api] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-16T20:25:12.852+07:00  INFO 5360 --- [shop-api] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-10-16T20:25:12.998+07:00  INFO 5360 --- [shop-api] [           main] vn.edu.ead.shop.ShopApplication          : Started ShopApplication in 13.119 seconds (process running for 14.141)
+2026-10-16T20:26:00.985+07:00  INFO 5360 --- [shop-api] [nio-8080-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-16T20:26:00.986+07:00  INFO 5360 --- [shop-api] [nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-16T20:26:00.987+07:00  INFO 5360 --- [shop-api] [nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms

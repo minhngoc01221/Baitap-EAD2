@@ -1,0 +1,163 @@
+
+> test:contract
+> newman run tests/contracts/shop-api.postman_collection.json --reporters cli,json --reporter-json-export docs/evidence/contract-newman.json
+
+newman
+
+Shop API - all 26 operations (mock contract)
+
+→ listCustomers
+  GET http://localhost:4010/customers?page=0&size=10&sort=id%2Casc [200 OK, 475B, 294ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ createCustomer
+  POST http://localhost:4010/customers [201 Created, 444B, 69ms]
+  √  HTTP 201
+  √  Response matches OpenAPI schema
+  √  Location header exists
+
+→ getCustomer
+  GET http://localhost:4010/customers/1 [200 OK, 409B, 27ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ updateCustomer
+  PUT http://localhost:4010/customers/1 [200 OK, 409B, 36ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ deleteCustomer
+  DELETE http://localhost:4010/customers/1 [204 No Content, 250B, 17ms]
+  √  HTTP 204
+  √  No body
+
+→ listProducts
+  GET http://localhost:4010/products?page=0&size=10&sort=id%2Casc [200 OK, 537B, 41ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ createProduct
+  POST http://localhost:4010/products [201 Created, 506B, 43ms]
+  √  HTTP 201
+  √  Response matches OpenAPI schema
+  √  Location header exists
+
+→ getProduct
+  GET http://localhost:4010/products/1 [200 OK, 471B, 23ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ updateProduct
+  PUT http://localhost:4010/products/1 [200 OK, 471B, 40ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ deleteProduct
+  DELETE http://localhost:4010/products/1 [204 No Content, 250B, 13ms]
+  √  HTTP 204
+  √  No body
+
+→ listCustomerOrders
+  GET http://localhost:4010/customers/1/orders?page=0&size=10&sort=id%2Casc [200 OK, 567B, 30ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ listOrders
+  GET http://localhost:4010/orders?page=0&size=10&sort=id%2Casc [200 OK, 567B, 33ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ createOrder
+  POST http://localhost:4010/orders [201 Created, 536B, 33ms]
+  √  HTTP 201
+  √  Response matches OpenAPI schema
+  √  Location header exists
+
+→ getOrder
+  GET http://localhost:4010/orders/1 [200 OK, 501B, 16ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ updateOrderStatus
+  PATCH http://localhost:4010/orders/1 [200 OK, 501B, 16ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ register
+  POST http://localhost:4010/registrations [201 Created, 524B, 19ms]
+  √  HTTP 201
+  √  Response matches OpenAPI schema
+  √  Location header exists
+
+→ login
+  POST http://localhost:4010/sessions [201 Created, 524B, 22ms]
+  √  HTTP 201
+  √  Response matches OpenAPI schema
+  √  Location header exists
+
+→ logout
+  DELETE http://localhost:4010/sessions [204 No Content, 250B, 6ms]
+  √  HTTP 204
+  √  No body
+
+→ getProfile
+  GET http://localhost:4010/profiles/current [200 OK, 409B, 10ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ updateProfile
+  PUT http://localhost:4010/profiles/current [200 OK, 409B, 14ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ listCategories
+  GET http://localhost:4010/categories [200 OK, 359B, 10ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ createCategory
+  POST http://localhost:4010/categories [201 Created, 380B, 11ms]
+  √  HTTP 201
+  √  Response matches OpenAPI schema
+  √  Location header exists
+
+→ getCategory
+  GET http://localhost:4010/categories/1 [200 OK, 357B, 10ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ updateCategory
+  PUT http://localhost:4010/categories/1 [200 OK, 357B, 15ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ deleteCategory
+  DELETE http://localhost:4010/categories/1 [204 No Content, 250B, 16ms]
+  √  HTTP 204
+  √  No body
+
+→ updateProductStock
+  PATCH http://localhost:4010/products/1/stock [200 OK, 471B, 34ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+┌─────────────────────────┬───────────────────┬──────────────────┐
+│                         │          executed │           failed │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│              iterations │                 1 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│                requests │                26 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│            test-scripts │                26 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│      prerequest-scripts │                 0 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│              assertions │                58 │                0 │
+├─────────────────────────┴───────────────────┴──────────────────┤
+│ total run duration: 2.1s                                       │
+├────────────────────────────────────────────────────────────────┤
+│ total data received: 3.52kB (approx)                           │
+├────────────────────────────────────────────────────────────────┤
+│ average response time: 34ms [min: 6ms, max: 294ms, s.d.: 53ms] │
+└────────────────────────────────────────────────────────────────┘

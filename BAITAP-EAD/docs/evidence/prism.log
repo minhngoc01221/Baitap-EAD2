@@ -1,0 +1,33 @@
+
+> mock
+> prism mock -h 127.0.0.1 -p 4010 src/main/resources/shop-api.yaml
+
+[18:41:35] » [CLI] ...  awaiting  Starting Prism…
+[18:41:36] » [CLI] i  info      GET        http://127.0.0.1:4010/customers?page=918029379&size=75&sort=id
+[18:41:36] » [CLI] i  info      POST       http://127.0.0.1:4010/customers
+[18:41:36] » [CLI] i  info      GET        http://127.0.0.1:4010/customers/3035638856045918
+[18:41:36] » [CLI] i  info      PUT        http://127.0.0.1:4010/customers/3552778557946018
+[18:41:36] » [CLI] i  info      DELETE     http://127.0.0.1:4010/customers/7267948302250308
+[18:41:36] » [CLI] i  info      GET        http://127.0.0.1:4010/products?page=1422762669&size=43&sort=ab
+[18:41:36] » [CLI] i  info      POST       http://127.0.0.1:4010/products
+[18:41:36] » [CLI] i  info      GET        http://127.0.0.1:4010/products/4145726844776870
+[18:41:36] » [CLI] i  info      PUT        http://127.0.0.1:4010/products/1144754073244398
+[18:41:36] » [CLI] i  info      DELETE     http://127.0.0.1:4010/products/3217804191911052
+[18:41:36] » [CLI] i  info      GET        http://127.0.0.1:4010/customers/2400706391661518/orders?page=1178795092&size=12&sort=aliquam
+[18:41:36] » [CLI] i  info      GET        http://127.0.0.1:4010/orders?page=1460814338&size=95&sort=et
+[18:41:36] » [CLI] i  info      POST       http://127.0.0.1:4010/orders
+[18:41:36] » [CLI] i  info      GET        http://127.0.0.1:4010/orders/8767989597091320
+[18:41:36] » [CLI] i  info      PATCH      http://127.0.0.1:4010/orders/2930261122029074
+[18:41:36] » [CLI] ►  start     Prism is listening on http://127.0.0.1:4010
+[18:42:03] » [HTTP SERVER] get /products i  info      Request received
+[18:42:03] »     [VALIDATOR] √  success   The request passed the validation rules. Looking for the best response
+[18:42:03] »     [NEGOTIATOR] √  success   Responding with the requested status code 200
+[18:42:03] »     [NEGOTIATOR] i  info      > Responding with "200"
+[18:44:17] » [HTTP SERVER] get /products i  info      Request received
+[18:44:17] »     [VALIDATOR] √  success   The request passed the validation rules. Looking for the best response
+[18:44:17] »     [NEGOTIATOR] √  success   Responding with the requested status code 200
+[18:44:17] »     [NEGOTIATOR] i  info      > Responding with "200"
+[18:44:19] » [HTTP SERVER] post /orders i  info      Request received
+[18:44:20] »     [VALIDATOR] √  success   The request passed the validation rules. Looking for the best response
+[18:44:20] »     [NEGOTIATOR] √  success   Responding with the requested status code 201
+[18:44:20] »     [NEGOTIATOR] i  info      > Responding with "201"

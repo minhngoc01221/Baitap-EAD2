@@ -1,0 +1,499 @@
+{
+  "result": "PASS",
+  "requests": 25,
+  "checks": [
+    {
+      "method": "POST",
+      "url": "http://localhost:8080/api/v1/customers",
+      "status": 201,
+      "location": "/api/v1/customers/1",
+      "request": {
+        "name": "Smoke Test",
+        "email": "smoke1792151051525820800@example.com",
+        "address": "123 Nguyen Trai"
+      },
+      "response": {
+        "id": 1,
+        "name": "Smoke Test",
+        "email": "smoke1792151051525820800@example.com",
+        "address": "123 Nguyen Trai"
+      }
+    },
+    {
+      "method": "POST",
+      "url": "http://localhost:8080/api/v1/products",
+      "status": 201,
+      "location": "/api/v1/products/1",
+      "request": {
+        "name": "Ban phim co",
+        "description": "USB keyboard",
+        "price": 750000,
+        "stock": 10
+      },
+      "response": {
+        "id": 1,
+        "name": "Ban phim co",
+        "description": "USB keyboard",
+        "price": 750000,
+        "stock": 10
+      }
+    },
+    {
+      "method": "GET",
+      "url": "http://localhost:8080/api/v1/customers/1",
+      "status": 200,
+      "location": null,
+      "request": null,
+      "response": {
+        "id": 1,
+        "name": "Smoke Test",
+        "email": "smoke1792151051525820800@example.com",
+        "address": "123 Nguyen Trai"
+      }
+    },
+    {
+      "method": "PUT",
+      "url": "http://localhost:8080/api/v1/customers/1",
+      "status": 200,
+      "location": null,
+      "request": {
+        "name": "Smoke Updated",
+        "email": "updated1792151053799857200@example.com",
+        "address": "456 Nguyen Trai"
+      },
+      "response": {
+        "id": 1,
+        "name": "Smoke Updated",
+        "email": "updated1792151053799857200@example.com",
+        "address": "456 Nguyen Trai"
+      }
+    },
+    {
+      "method": "PUT",
+      "url": "http://localhost:8080/api/v1/products/1",
+      "status": 200,
+      "location": null,
+      "request": {
+        "name": "Ban phim co",
+        "description": "USB keyboard",
+        "price": 750000,
+        "stock": 10
+      },
+      "response": {
+        "id": 1,
+        "name": "Ban phim co",
+        "description": "USB keyboard",
+        "price": 750000,
+        "stock": 10
+      }
+    },
+    {
+      "method": "GET",
+      "url": "http://localhost:8080/api/v1/customers?page=0&size=10&sort=name,asc",
+      "status": 200,
+      "location": null,
+      "request": null,
+      "response": {
+        "content": [
+          {
+            "id": 1,
+            "name": "Smoke Updated",
+            "email": "updated1792151053799857200@example.com",
+            "address": "456 Nguyen Trai"
+          }
+        ],
+        "page": 0,
+        "size": 10,
+        "totalElements": 1,
+        "totalPages": 1
+      }
+    },
+    {
+      "method": "GET",
+      "url": "http://localhost:8080/api/v1/products?page=0&size=10&sort=price,desc",
+      "status": 200,
+      "location": null,
+      "request": null,
+      "response": {
+        "content": [
+          {
+            "id": 1,
+            "name": "Ban phim co",
+            "description": "USB keyboard",
+            "price": 750000.0,
+            "stock": 10
+          }
+        ],
+        "page": 0,
+        "size": 10,
+        "totalElements": 1,
+        "totalPages": 1
+      }
+    },
+    {
+      "method": "POST",
+      "url": "http://localhost:8080/api/v1/orders",
+      "status": 201,
+      "location": "/api/v1/orders/1",
+      "request": {
+        "customerId": 1,
+        "items": [
+          {
+            "productId": 1,
+            "quantity": 2
+          }
+        ]
+      },
+      "response": {
+        "id": 1,
+        "customerId": 1,
+        "status": "PENDING",
+        "createdAt": "2026-10-16T11:44:14.4541746Z",
+        "total": 1500000.0,
+        "items": [
+          {
+            "productId": 1,
+            "productName": "Ban phim co",
+            "quantity": 2,
+            "unitPrice": 750000.0,
+            "subtotal": 1500000.0
+          }
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "url": "http://localhost:8080/api/v1/products/1",
+      "status": 200,
+      "location": null,
+      "request": null,
+      "response": {
+        "id": 1,
+        "name": "Ban phim co",
+        "description": "USB keyboard",
+        "price": 750000.0,
+        "stock": 8
+      }
+    },
+    {
+      "method": "GET",
+      "url": "http://localhost:8080/api/v1/orders/1",
+      "status": 200,
+      "location": null,
+      "request": null,
+      "response": {
+        "id": 1,
+        "customerId": 1,
+        "status": "PENDING",
+        "createdAt": "2026-10-16T11:44:14.454175Z",
+        "total": 1500000.0,
+        "items": [
+          {
+            "productId": 1,
+            "productName": "Ban phim co",
+            "quantity": 2,
+            "unitPrice": 750000.0,
+            "subtotal": 1500000.0
+          }
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "url": "http://localhost:8080/api/v1/orders",
+      "status": 200,
+      "location": null,
+      "request": null,
+      "response": {
+        "content": [
+          {
+            "id": 1,
+            "customerId": 1,
+            "status": "PENDING",
+            "createdAt": "2026-10-16T11:44:14.454175Z",
+            "total": 1500000.0,
+            "items": [
+              {
+                "productId": 1,
+                "productName": "Ban phim co",
+                "quantity": 2,
+                "unitPrice": 750000.0,
+                "subtotal": 1500000.0
+              }
+            ]
+          }
+        ],
+        "page": 0,
+        "size": 10,
+        "totalElements": 1,
+        "totalPages": 1
+      }
+    },
+    {
+      "method": "GET",
+      "url": "http://localhost:8080/api/v1/customers/1/orders",
+      "status": 200,
+      "location": null,
+      "request": null,
+      "response": {
+        "content": [
+          {
+            "id": 1,
+            "customerId": 1,
+            "status": "PENDING",
+            "createdAt": "2026-10-16T11:44:14.454175Z",
+            "total": 1500000.0,
+            "items": [
+              {
+                "productId": 1,
+                "productName": "Ban phim co",
+                "quantity": 2,
+                "unitPrice": 750000.0,
+                "subtotal": 1500000.0
+              }
+            ]
+          }
+        ],
+        "page": 0,
+        "size": 10,
+        "totalElements": 1,
+        "totalPages": 1
+      }
+    },
+    {
+      "method": "PATCH",
+      "url": "http://localhost:8080/api/v1/orders/1",
+      "status": 422,
+      "location": null,
+      "request": {
+        "status": "COMPLETED"
+      },
+      "response": {
+        "code": "BUSINESS_RULE",
+        "message": "Invalid transition: PENDING -> COMPLETED",
+        "details": []
+      }
+    },
+    {
+      "method": "PATCH",
+      "url": "http://localhost:8080/api/v1/orders/1",
+      "status": 200,
+      "location": null,
+      "request": {
+        "status": "CANCELLED"
+      },
+      "response": {
+        "id": 1,
+        "customerId": 1,
+        "status": "CANCELLED",
+        "createdAt": "2026-10-16T11:44:14.454175Z",
+        "total": 1500000.0,
+        "items": [
+          {
+            "productId": 1,
+            "productName": "Ban phim co",
+            "quantity": 2,
+            "unitPrice": 750000.0,
+            "subtotal": 1500000.0
+          }
+        ]
+      }
+    },
+    {
+      "method": "PATCH",
+      "url": "http://localhost:8080/api/v1/orders/1",
+      "status": 200,
+      "location": null,
+      "request": {
+        "status": "CANCELLED"
+      },
+      "response": {
+        "id": 1,
+        "customerId": 1,
+        "status": "CANCELLED",
+        "createdAt": "2026-10-16T11:44:14.454175Z",
+        "total": 1500000.0,
+        "items": [
+          {
+            "productId": 1,
+            "productName": "Ban phim co",
+            "quantity": 2,
+            "unitPrice": 750000.0,
+            "subtotal": 1500000.0
+          }
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "url": "http://localhost:8080/api/v1/products/1",
+      "status": 200,
+      "location": null,
+      "request": null,
+      "response": {
+        "id": 1,
+        "name": "Ban phim co",
+        "description": "USB keyboard",
+        "price": 750000.0,
+        "stock": 10
+      }
+    },
+    {
+      "method": "POST",
+      "url": "http://localhost:8080/api/v1/orders",
+      "status": 422,
+      "location": null,
+      "request": {
+        "customerId": 1,
+        "items": [
+          {
+            "productId": 1,
+            "quantity": 99
+          }
+        ]
+      },
+      "response": {
+        "code": "BUSINESS_RULE",
+        "message": "Insufficient stock for product 1",
+        "details": []
+      }
+    },
+    {
+      "method": "POST",
+      "url": "http://localhost:8080/api/v1/customers",
+      "status": 400,
+      "location": null,
+      "request": {
+        "name": "X",
+        "email": "invalid",
+        "address": "x"
+      },
+      "response": {
+        "code": "VALIDATION_ERROR",
+        "message": "Invalid request",
+        "details": [
+          "name: size must be between 2 and 100",
+          "email: must be a well-formed email address",
+          "address: size must be between 5 and 255"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "url": "http://localhost:8080/api/v1/products/99999999",
+      "status": 404,
+      "location": null,
+      "request": null,
+      "response": {
+        "code": "NOT_FOUND",
+        "message": "Product not found",
+        "details": []
+      }
+    },
+    {
+      "method": "GET",
+      "url": "http://localhost:8080/api/v1/products?size=101",
+      "status": 400,
+      "location": null,
+      "request": null,
+      "response": {
+        "code": "VALIDATION_ERROR",
+        "message": "Invalid request",
+        "details": [
+          "Check parameter types, required fields and JSON values"
+        ]
+      }
+    },
+    {
+      "method": "DELETE",
+      "url": "http://localhost:8080/api/v1/products/1",
+      "status": 422,
+      "location": null,
+      "request": null,
+      "response": {
+        "code": "BUSINESS_RULE",
+        "message": "Product has historical orders",
+        "details": []
+      }
+    },
+    {
+      "method": "POST",
+      "url": "http://localhost:8080/api/v1/products",
+      "status": 201,
+      "location": "/api/v1/products/2",
+      "request": {
+        "name": "Temporary",
+        "price": 10000,
+        "stock": 1
+      },
+      "response": {
+        "id": 2,
+        "name": "Temporary",
+        "description": null,
+        "price": 10000,
+        "stock": 1
+      }
+    },
+    {
+      "method": "DELETE",
+      "url": "http://localhost:8080/api/v1/products/2",
+      "status": 204,
+      "location": null,
+      "request": null,
+      "response": null
+    },
+    {
+      "method": "GET",
+      "url": "http://localhost:4010/products",
+      "status": 200,
+      "location": null,
+      "request": null,
+      "response": {
+        "content": [
+          {
+            "id": 1,
+            "name": "Ban phim co",
+            "description": "Ban phim USB",
+            "price": 750000,
+            "stock": 30
+          }
+        ],
+        "page": 0,
+        "size": 10,
+        "totalElements": 1,
+        "totalPages": 1
+      }
+    },
+    {
+      "method": "POST",
+      "url": "http://localhost:4010/orders",
+      "status": 201,
+      "location": "http://example.com",
+      "request": {
+        "customerId": 1,
+        "items": [
+          {
+            "productId": 1,
+            "quantity": 2
+          }
+        ]
+      },
+      "response": {
+        "id": 1,
+        "customerId": 1,
+        "status": "PENDING",
+        "createdAt": "2026-10-16T09:00:00Z",
+        "total": 1500000,
+        "items": [
+          {
+            "productId": 1,
+            "productName": "Ban phim co",
+            "quantity": 2,
+            "unitPrice": 750000,
+            "subtotal": 1500000
+          }
+        ]
+      }
+    }
+  ]
+}

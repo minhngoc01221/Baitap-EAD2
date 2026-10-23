@@ -1,0 +1,175 @@
+
+> test:contract:backend
+> newman run tests/contracts/shop-backend.postman_collection.json --reporters cli,json --reporter-json-export docs/evidence/contract-backend-newman.json
+
+newman
+
+Shop API - backend contracts, all 26 operations
+
+→ register
+  POST http://localhost:8080/api/v1/registrations [201 Created, 547B, 848ms]
+  √  HTTP 201
+  √  Response matches OpenAPI schema
+  √  Location header exists
+
+→ login
+  POST http://localhost:8080/api/v1/sessions [201 Created, 526B, 117ms]
+  √  HTTP 201
+  √  Response matches OpenAPI schema
+  √  Location header exists
+
+→ getProfile
+  GET http://localhost:8080/api/v1/profiles/current [200 OK, 368B, 33ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ updateProfile
+  PUT http://localhost:8080/api/v1/profiles/current [200 OK, 368B, 44ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ listCategories
+  GET http://localhost:8080/api/v1/categories [200 OK, 510B, 55ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ createCategory
+  POST http://localhost:8080/api/v1/categories [201 Created, 325B, 31ms]
+  √  HTTP 201
+  √  Response matches OpenAPI schema
+  √  Location header exists
+
+→ getCategory
+  GET http://localhost:8080/api/v1/categories/6 [200 OK, 288B, 31ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ updateCategory
+  PUT http://localhost:8080/api/v1/categories/6 [200 OK, 296B, 19ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ deleteCategory
+  DELETE http://localhost:8080/api/v1/categories/6 [204 No Content, 201B, 30ms]
+  √  HTTP 204
+  √  No body
+
+→ listCustomers
+  GET http://localhost:8080/api/v1/customers?page=0&size=10&sort=id,asc [200 OK, 1.55kB, 93ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ createCustomer
+  POST http://localhost:8080/api/v1/customers [201 Created, 415B, 21ms]
+  √  HTTP 201
+  √  Response matches OpenAPI schema
+  √  Location header exists
+
+→ getCustomer
+  GET http://localhost:8080/api/v1/customers/17 [200 OK, 378B, 18ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ updateCustomer
+  PUT http://localhost:8080/api/v1/customers/17 [200 OK, 378B, 20ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ listProducts
+  GET http://localhost:8080/api/v1/products?page=0&size=10&sort=price,desc [200 OK, 3.41kB, 82ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ createProduct
+  POST http://localhost:8080/api/v1/products [201 Created, 466B, 66ms]
+  √  HTTP 201
+  √  Response matches OpenAPI schema
+  √  Location header exists
+
+→ getProduct
+  GET http://localhost:8080/api/v1/products/22 [200 OK, 433B, 11ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ updateProduct
+  PUT http://localhost:8080/api/v1/products/22 [200 OK, 430B, 36ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ updateProductStock
+  PATCH http://localhost:8080/api/v1/products/22/stock [200 OK, 433B, 32ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ createOrder
+  POST http://localhost:8080/api/v1/orders [201 Created, 509B, 144ms]
+  √  HTTP 201
+  √  Response matches OpenAPI schema
+  √  Location header exists
+
+→ getOrder
+  GET http://localhost:8080/api/v1/orders/6 [200 OK, 475B, 34ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ listOrders
+  GET http://localhost:8080/api/v1/orders?page=0&size=10&sort=id,desc [200 OK, 1.64kB, 35ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ listCustomerOrders
+  GET http://localhost:8080/api/v1/customers/17/orders?page=0&size=10&sort=id,desc [200 OK, 541B, 33ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ updateOrderStatus
+  PATCH http://localhost:8080/api/v1/orders/6 [200 OK, 472B, 52ms]
+  √  HTTP 200
+  √  Response matches OpenAPI schema
+
+→ createProduct
+  POST http://localhost:8080/api/v1/products [201 Created, 476B, 18ms]
+  √  HTTP 201
+  √  Response matches OpenAPI schema
+  √  Location header exists
+
+→ deleteProduct
+  DELETE http://localhost:8080/api/v1/products/23 [204 No Content, 201B, 23ms]
+  √  HTTP 204
+  √  No body
+
+→ createCustomer
+  POST http://localhost:8080/api/v1/customers [201 Created, 421B, 16ms]
+  √  HTTP 201
+  √  Response matches OpenAPI schema
+  √  Location header exists
+
+→ deleteCustomer
+  DELETE http://localhost:8080/api/v1/customers/18 [204 No Content, 201B, 62ms]
+  √  HTTP 204
+  √  No body
+
+→ logout
+  DELETE http://localhost:8080/api/v1/sessions [204 No Content, 201B, 13ms]
+  √  HTTP 204
+  √  No body
+
+┌─────────────────────────┬────────────────────┬───────────────────┐
+│                         │           executed │            failed │
+├─────────────────────────┼────────────────────┼───────────────────┤
+│              iterations │                  1 │                 0 │
+├─────────────────────────┼────────────────────┼───────────────────┤
+│                requests │                 28 │                 0 │
+├─────────────────────────┼────────────────────┼───────────────────┤
+│            test-scripts │                 28 │                 0 │
+├─────────────────────────┼────────────────────┼───────────────────┤
+│      prerequest-scripts │                 28 │                 0 │
+├─────────────────────────┼────────────────────┼───────────────────┤
+│              assertions │                 64 │                 0 │
+├─────────────────────────┴────────────────────┴───────────────────┤
+│ total run duration: 3.2s                                         │
+├──────────────────────────────────────────────────────────────────┤
+│ total data received: 9.29kB (approx)                             │
+├──────────────────────────────────────────────────────────────────┤
+│ average response time: 72ms [min: 11ms, max: 848ms, s.d.: 152ms] │
+└──────────────────────────────────────────────────────────────────┘

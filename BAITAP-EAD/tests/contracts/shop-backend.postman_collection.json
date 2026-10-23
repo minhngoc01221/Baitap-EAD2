@@ -1,0 +1,860 @@
+{
+  "info": {
+    "name": "Shop API - backend contracts, all 26 operations",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080/api/v1"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "nonce",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "register",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/registrations",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Contract Customer\",\"email\":\"contract{{nonce}}@example.com\",\"address\":\"123 Nguyen Trai\",\"phone\":\"0901234567\",\"password\":\"Customer123!\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201',()=>pm.response.to.have.status(201));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"token\":{\"type\":\"string\"},\"customer\":{\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"name\":{\"type\":\"string\",\"minLength\":2,\"maxLength\":100},\"email\":{\"type\":\"string\",\"minLength\":3,\"maxLength\":150},\"address\":{\"type\":\"string\",\"minLength\":5,\"maxLength\":255},\"phone\":{\"type\":\"string\",\"pattern\":\"^\\\\+?[0-9]{9,15}$\",\"minLength\":9,\"maxLength\":16}},\"required\":[\"id\",\"name\",\"email\",\"address\",\"phone\"]},\"role\":{\"type\":\"string\",\"enum\":[\"CUSTOMER\",\"ADMIN\"]},\"expiresAt\":{\"type\":\"string\"}},\"required\":[\"token\",\"customer\",\"role\",\"expiresAt\"]}));",
+              "pm.test('Location header exists',()=>pm.expect(pm.response.headers.get('Location')).to.be.a('string')); "
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/sessions",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\":\"admin@shop.local\",\"password\":\"Admin123!\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201',()=>pm.response.to.have.status(201));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"token\":{\"type\":\"string\"},\"customer\":{\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"name\":{\"type\":\"string\",\"minLength\":2,\"maxLength\":100},\"email\":{\"type\":\"string\",\"minLength\":3,\"maxLength\":150},\"address\":{\"type\":\"string\",\"minLength\":5,\"maxLength\":255},\"phone\":{\"type\":\"string\",\"pattern\":\"^\\\\+?[0-9]{9,15}$\",\"minLength\":9,\"maxLength\":16}},\"required\":[\"id\",\"name\",\"email\",\"address\",\"phone\"]},\"role\":{\"type\":\"string\",\"enum\":[\"CUSTOMER\",\"ADMIN\"]},\"expiresAt\":{\"type\":\"string\"}},\"required\":[\"token\",\"customer\",\"role\",\"expiresAt\"]}));",
+              "pm.test('Location header exists',()=>pm.expect(pm.response.headers.get('Location')).to.be.a('string')); ",
+              "if(pm.response.code<300)pm.collectionVariables.set('token',pm.response.json().token);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "getProfile",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/profiles/current"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200',()=>pm.response.to.have.status(200));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"name\":{\"type\":\"string\",\"minLength\":2,\"maxLength\":100},\"email\":{\"type\":\"string\",\"minLength\":3,\"maxLength\":150},\"address\":{\"type\":\"string\",\"minLength\":5,\"maxLength\":255},\"phone\":{\"type\":\"string\",\"pattern\":\"^\\\\+?[0-9]{9,15}$\",\"minLength\":9,\"maxLength\":16}},\"required\":[\"id\",\"name\",\"email\",\"address\",\"phone\"]}));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "updateProfile",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/profiles/current",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Quan tri vien\",\"email\":\"admin@shop.local\",\"phone\":\"0901000001\",\"address\":\"123 Nguyen Trai, TP HCM\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200',()=>pm.response.to.have.status(200));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"name\":{\"type\":\"string\",\"minLength\":2,\"maxLength\":100},\"email\":{\"type\":\"string\",\"minLength\":3,\"maxLength\":150},\"address\":{\"type\":\"string\",\"minLength\":5,\"maxLength\":255},\"phone\":{\"type\":\"string\",\"pattern\":\"^\\\\+?[0-9]{9,15}$\",\"minLength\":9,\"maxLength\":16}},\"required\":[\"id\",\"name\",\"email\",\"address\",\"phone\"]}));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "listCategories",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/categories"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200',()=>pm.response.to.have.status(200));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"name\":{\"type\":\"string\",\"minLength\":2,\"maxLength\":100},\"description\":{\"type\":\"string\",\"maxLength\":1000}},\"required\":[\"id\",\"name\"]}}));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "createCategory",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/categories",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Contract category\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201',()=>pm.response.to.have.status(201));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"name\":{\"type\":\"string\",\"minLength\":2,\"maxLength\":100},\"description\":{\"type\":\"string\",\"maxLength\":1000}},\"required\":[\"id\",\"name\"]}));",
+              "pm.test('Location header exists',()=>pm.expect(pm.response.headers.get('Location')).to.be.a('string')); ",
+              "if(pm.response.code<300)pm.collectionVariables.set('categoryId',pm.response.json().id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "getCategory",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/categories/{{categoryId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200',()=>pm.response.to.have.status(200));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"name\":{\"type\":\"string\",\"minLength\":2,\"maxLength\":100},\"description\":{\"type\":\"string\",\"maxLength\":1000}},\"required\":[\"id\",\"name\"]}));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "updateCategory",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/categories/{{categoryId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Contract updated category\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200',()=>pm.response.to.have.status(200));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"name\":{\"type\":\"string\",\"minLength\":2,\"maxLength\":100},\"description\":{\"type\":\"string\",\"maxLength\":1000}},\"required\":[\"id\",\"name\"]}));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "deleteCategory",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/categories/{{categoryId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 204',()=>pm.response.to.have.status(204));",
+              "pm.test('No body',()=>pm.expect(pm.response.text()).to.eql('')); "
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "listCustomers",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/customers?page=0&size=10&sort=id,asc"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200',()=>pm.response.to.have.status(200));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"content\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"name\":{\"type\":\"string\",\"minLength\":2,\"maxLength\":100},\"email\":{\"type\":\"string\",\"minLength\":3,\"maxLength\":150},\"address\":{\"type\":\"string\",\"minLength\":5,\"maxLength\":255},\"phone\":{\"type\":\"string\",\"pattern\":\"^\\\\+?[0-9]{9,15}$\",\"minLength\":9,\"maxLength\":16}},\"required\":[\"id\",\"name\",\"email\",\"address\",\"phone\"]}},\"page\":{\"type\":\"integer\"},\"size\":{\"type\":\"integer\"},\"totalElements\":{\"type\":\"integer\"},\"totalPages\":{\"type\":\"integer\"}},\"required\":[\"content\",\"page\",\"size\",\"totalElements\",\"totalPages\"]}));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "createCustomer",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/customers",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Contract Customer\",\"email\":\"crud{{nonce}}@example.com\",\"address\":\"123 Nguyen Trai\",\"phone\":\"0901234567\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201',()=>pm.response.to.have.status(201));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"name\":{\"type\":\"string\",\"minLength\":2,\"maxLength\":100},\"email\":{\"type\":\"string\",\"minLength\":3,\"maxLength\":150},\"address\":{\"type\":\"string\",\"minLength\":5,\"maxLength\":255},\"phone\":{\"type\":\"string\",\"pattern\":\"^\\\\+?[0-9]{9,15}$\",\"minLength\":9,\"maxLength\":16}},\"required\":[\"id\",\"name\",\"email\",\"address\",\"phone\"]}));",
+              "pm.test('Location header exists',()=>pm.expect(pm.response.headers.get('Location')).to.be.a('string')); ",
+              "if(pm.response.code<300)pm.collectionVariables.set('customerId',pm.response.json().id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "getCustomer",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/customers/{{customerId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200',()=>pm.response.to.have.status(200));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"name\":{\"type\":\"string\",\"minLength\":2,\"maxLength\":100},\"email\":{\"type\":\"string\",\"minLength\":3,\"maxLength\":150},\"address\":{\"type\":\"string\",\"minLength\":5,\"maxLength\":255},\"phone\":{\"type\":\"string\",\"pattern\":\"^\\\\+?[0-9]{9,15}$\",\"minLength\":9,\"maxLength\":16}},\"required\":[\"id\",\"name\",\"email\",\"address\",\"phone\"]}));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "updateCustomer",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/customers/{{customerId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Contract Customer\",\"email\":\"crud{{nonce}}@example.com\",\"address\":\"123 Nguyen Trai\",\"phone\":\"0901234567\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200',()=>pm.response.to.have.status(200));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"name\":{\"type\":\"string\",\"minLength\":2,\"maxLength\":100},\"email\":{\"type\":\"string\",\"minLength\":3,\"maxLength\":150},\"address\":{\"type\":\"string\",\"minLength\":5,\"maxLength\":255},\"phone\":{\"type\":\"string\",\"pattern\":\"^\\\\+?[0-9]{9,15}$\",\"minLength\":9,\"maxLength\":16}},\"required\":[\"id\",\"name\",\"email\",\"address\",\"phone\"]}));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "listProducts",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/products?page=0&size=10&sort=price,desc"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200',()=>pm.response.to.have.status(200));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"content\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"name\":{\"type\":\"string\",\"minLength\":2,\"maxLength\":150},\"description\":{\"type\":\"string\",\"maxLength\":2000},\"price\":{\"type\":\"number\",\"minimum\":0.01,\"maximum\":9999999999999.99},\"stock\":{\"type\":\"integer\",\"minimum\":0},\"categoryId\":{\"type\":\"integer\",\"minimum\":1},\"imageUrl\":{\"type\":\"string\",\"maxLength\":500,\"pattern\":\"^(/images/[a-z-]+\\\\.svg|https://[^\\\\s]+)$\"},\"categoryName\":{\"type\":\"string\"}},\"required\":[\"id\",\"name\",\"price\",\"stock\",\"categoryId\",\"imageUrl\"]}},\"page\":{\"type\":\"integer\"},\"size\":{\"type\":\"integer\"},\"totalElements\":{\"type\":\"integer\"},\"totalPages\":{\"type\":\"integer\"}},\"required\":[\"content\",\"page\",\"size\",\"totalElements\",\"totalPages\"]}));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "createProduct",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/products",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Contract Keyboard\",\"description\":\"Contract verification\",\"price\":750000,\"stock\":10,\"categoryId\":1,\"imageUrl\":\"/images/keyboard.svg\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201',()=>pm.response.to.have.status(201));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"name\":{\"type\":\"string\",\"minLength\":2,\"maxLength\":150},\"description\":{\"type\":\"string\",\"maxLength\":2000},\"price\":{\"type\":\"number\",\"minimum\":0.01,\"maximum\":9999999999999.99},\"stock\":{\"type\":\"integer\",\"minimum\":0},\"categoryId\":{\"type\":\"integer\",\"minimum\":1},\"imageUrl\":{\"type\":\"string\",\"maxLength\":500,\"pattern\":\"^(/images/[a-z-]+\\\\.svg|https://[^\\\\s]+)$\"},\"categoryName\":{\"type\":\"string\"}},\"required\":[\"id\",\"name\",\"price\",\"stock\",\"categoryId\",\"imageUrl\"]}));",
+              "pm.test('Location header exists',()=>pm.expect(pm.response.headers.get('Location')).to.be.a('string')); ",
+              "if(pm.response.code<300)pm.collectionVariables.set('productId',pm.response.json().id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "getProduct",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/products/{{productId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200',()=>pm.response.to.have.status(200));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"name\":{\"type\":\"string\",\"minLength\":2,\"maxLength\":150},\"description\":{\"type\":\"string\",\"maxLength\":2000},\"price\":{\"type\":\"number\",\"minimum\":0.01,\"maximum\":9999999999999.99},\"stock\":{\"type\":\"integer\",\"minimum\":0},\"categoryId\":{\"type\":\"integer\",\"minimum\":1},\"imageUrl\":{\"type\":\"string\",\"maxLength\":500,\"pattern\":\"^(/images/[a-z-]+\\\\.svg|https://[^\\\\s]+)$\"},\"categoryName\":{\"type\":\"string\"}},\"required\":[\"id\",\"name\",\"price\",\"stock\",\"categoryId\",\"imageUrl\"]}));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "updateProduct",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/products/{{productId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Contract Keyboard\",\"description\":\"Contract verification\",\"price\":750000,\"stock\":10,\"categoryId\":1,\"imageUrl\":\"/images/keyboard.svg\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200',()=>pm.response.to.have.status(200));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"name\":{\"type\":\"string\",\"minLength\":2,\"maxLength\":150},\"description\":{\"type\":\"string\",\"maxLength\":2000},\"price\":{\"type\":\"number\",\"minimum\":0.01,\"maximum\":9999999999999.99},\"stock\":{\"type\":\"integer\",\"minimum\":0},\"categoryId\":{\"type\":\"integer\",\"minimum\":1},\"imageUrl\":{\"type\":\"string\",\"maxLength\":500,\"pattern\":\"^(/images/[a-z-]+\\\\.svg|https://[^\\\\s]+)$\"},\"categoryName\":{\"type\":\"string\"}},\"required\":[\"id\",\"name\",\"price\",\"stock\",\"categoryId\",\"imageUrl\"]}));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "updateProductStock",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/products/{{productId}}/stock",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"stock\":10}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200',()=>pm.response.to.have.status(200));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"name\":{\"type\":\"string\",\"minLength\":2,\"maxLength\":150},\"description\":{\"type\":\"string\",\"maxLength\":2000},\"price\":{\"type\":\"number\",\"minimum\":0.01,\"maximum\":9999999999999.99},\"stock\":{\"type\":\"integer\",\"minimum\":0},\"categoryId\":{\"type\":\"integer\",\"minimum\":1},\"imageUrl\":{\"type\":\"string\",\"maxLength\":500,\"pattern\":\"^(/images/[a-z-]+\\\\.svg|https://[^\\\\s]+)$\"},\"categoryName\":{\"type\":\"string\"}},\"required\":[\"id\",\"name\",\"price\",\"stock\",\"categoryId\",\"imageUrl\"]}));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "createOrder",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/orders",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"customerId\":{{customerId}},\"items\":[{\"productId\":{{productId}},\"quantity\":2}]}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201',()=>pm.response.to.have.status(201));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"customerId\":{\"type\":\"integer\",\"minimum\":1},\"status\":{\"type\":\"string\",\"enum\":[\"PENDING\",\"PAID\",\"SHIPPED\",\"CANCELLED\"]},\"createdAt\":{\"type\":\"string\"},\"total\":{\"type\":\"number\"},\"items\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"productId\":{\"type\":\"integer\",\"minimum\":1},\"productName\":{\"type\":\"string\"},\"quantity\":{\"type\":\"integer\"},\"unitPrice\":{\"type\":\"number\"},\"subtotal\":{\"type\":\"number\"}},\"required\":[\"productId\",\"productName\",\"quantity\",\"unitPrice\",\"subtotal\"]}}},\"required\":[\"id\",\"customerId\",\"status\",\"createdAt\",\"total\",\"items\"]}));",
+              "pm.test('Location header exists',()=>pm.expect(pm.response.headers.get('Location')).to.be.a('string')); ",
+              "if(pm.response.code<300)pm.collectionVariables.set('orderId',pm.response.json().id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "getOrder",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/orders/{{orderId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200',()=>pm.response.to.have.status(200));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"customerId\":{\"type\":\"integer\",\"minimum\":1},\"status\":{\"type\":\"string\",\"enum\":[\"PENDING\",\"PAID\",\"SHIPPED\",\"CANCELLED\"]},\"createdAt\":{\"type\":\"string\"},\"total\":{\"type\":\"number\"},\"items\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"productId\":{\"type\":\"integer\",\"minimum\":1},\"productName\":{\"type\":\"string\"},\"quantity\":{\"type\":\"integer\"},\"unitPrice\":{\"type\":\"number\"},\"subtotal\":{\"type\":\"number\"}},\"required\":[\"productId\",\"productName\",\"quantity\",\"unitPrice\",\"subtotal\"]}}},\"required\":[\"id\",\"customerId\",\"status\",\"createdAt\",\"total\",\"items\"]}));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "listOrders",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/orders?page=0&size=10&sort=id,desc"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200',()=>pm.response.to.have.status(200));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"content\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"customerId\":{\"type\":\"integer\",\"minimum\":1},\"status\":{\"type\":\"string\",\"enum\":[\"PENDING\",\"PAID\",\"SHIPPED\",\"CANCELLED\"]},\"createdAt\":{\"type\":\"string\"},\"total\":{\"type\":\"number\"},\"items\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"productId\":{\"type\":\"integer\",\"minimum\":1},\"productName\":{\"type\":\"string\"},\"quantity\":{\"type\":\"integer\"},\"unitPrice\":{\"type\":\"number\"},\"subtotal\":{\"type\":\"number\"}},\"required\":[\"productId\",\"productName\",\"quantity\",\"unitPrice\",\"subtotal\"]}}},\"required\":[\"id\",\"customerId\",\"status\",\"createdAt\",\"total\",\"items\"]}},\"page\":{\"type\":\"integer\"},\"size\":{\"type\":\"integer\"},\"totalElements\":{\"type\":\"integer\"},\"totalPages\":{\"type\":\"integer\"}},\"required\":[\"content\",\"page\",\"size\",\"totalElements\",\"totalPages\"]}));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "listCustomerOrders",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/customers/{{customerId}}/orders?page=0&size=10&sort=id,desc"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200',()=>pm.response.to.have.status(200));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"content\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"customerId\":{\"type\":\"integer\",\"minimum\":1},\"status\":{\"type\":\"string\",\"enum\":[\"PENDING\",\"PAID\",\"SHIPPED\",\"CANCELLED\"]},\"createdAt\":{\"type\":\"string\"},\"total\":{\"type\":\"number\"},\"items\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"productId\":{\"type\":\"integer\",\"minimum\":1},\"productName\":{\"type\":\"string\"},\"quantity\":{\"type\":\"integer\"},\"unitPrice\":{\"type\":\"number\"},\"subtotal\":{\"type\":\"number\"}},\"required\":[\"productId\",\"productName\",\"quantity\",\"unitPrice\",\"subtotal\"]}}},\"required\":[\"id\",\"customerId\",\"status\",\"createdAt\",\"total\",\"items\"]}},\"page\":{\"type\":\"integer\"},\"size\":{\"type\":\"integer\"},\"totalElements\":{\"type\":\"integer\"},\"totalPages\":{\"type\":\"integer\"}},\"required\":[\"content\",\"page\",\"size\",\"totalElements\",\"totalPages\"]}));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "updateOrderStatus",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/orders/{{orderId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"status\":\"PAID\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200',()=>pm.response.to.have.status(200));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"customerId\":{\"type\":\"integer\",\"minimum\":1},\"status\":{\"type\":\"string\",\"enum\":[\"PENDING\",\"PAID\",\"SHIPPED\",\"CANCELLED\"]},\"createdAt\":{\"type\":\"string\"},\"total\":{\"type\":\"number\"},\"items\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"productId\":{\"type\":\"integer\",\"minimum\":1},\"productName\":{\"type\":\"string\"},\"quantity\":{\"type\":\"integer\"},\"unitPrice\":{\"type\":\"number\"},\"subtotal\":{\"type\":\"number\"}},\"required\":[\"productId\",\"productName\",\"quantity\",\"unitPrice\",\"subtotal\"]}}},\"required\":[\"id\",\"customerId\",\"status\",\"createdAt\",\"total\",\"items\"]}));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "createProduct",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/products",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Disposable Contract Product\",\"description\":\"Contract verification\",\"price\":750000,\"stock\":10,\"categoryId\":1,\"imageUrl\":\"/images/keyboard.svg\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201',()=>pm.response.to.have.status(201));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"name\":{\"type\":\"string\",\"minLength\":2,\"maxLength\":150},\"description\":{\"type\":\"string\",\"maxLength\":2000},\"price\":{\"type\":\"number\",\"minimum\":0.01,\"maximum\":9999999999999.99},\"stock\":{\"type\":\"integer\",\"minimum\":0},\"categoryId\":{\"type\":\"integer\",\"minimum\":1},\"imageUrl\":{\"type\":\"string\",\"maxLength\":500,\"pattern\":\"^(/images/[a-z-]+\\\\.svg|https://[^\\\\s]+)$\"},\"categoryName\":{\"type\":\"string\"}},\"required\":[\"id\",\"name\",\"price\",\"stock\",\"categoryId\",\"imageUrl\"]}));",
+              "pm.test('Location header exists',()=>pm.expect(pm.response.headers.get('Location')).to.be.a('string')); ",
+              "if(pm.response.code<300)pm.collectionVariables.set('disposableProductId',pm.response.json().id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "deleteProduct",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/products/{{disposableProductId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 204',()=>pm.response.to.have.status(204));",
+              "pm.test('No body',()=>pm.expect(pm.response.text()).to.eql('')); "
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "createCustomer",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/customers",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Contract Customer\",\"email\":\"disposable{{nonce}}@example.com\",\"address\":\"123 Nguyen Trai\",\"phone\":\"0901234567\"}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201',()=>pm.response.to.have.status(201));",
+              "pm.test('Response matches OpenAPI schema',()=>pm.response.to.have.jsonSchema({\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"integer\",\"minimum\":1},\"name\":{\"type\":\"string\",\"minLength\":2,\"maxLength\":100},\"email\":{\"type\":\"string\",\"minLength\":3,\"maxLength\":150},\"address\":{\"type\":\"string\",\"minLength\":5,\"maxLength\":255},\"phone\":{\"type\":\"string\",\"pattern\":\"^\\\\+?[0-9]{9,15}$\",\"minLength\":9,\"maxLength\":16}},\"required\":[\"id\",\"name\",\"email\",\"address\",\"phone\"]}));",
+              "pm.test('Location header exists',()=>pm.expect(pm.response.headers.get('Location')).to.be.a('string')); ",
+              "if(pm.response.code<300)pm.collectionVariables.set('disposableCustomerId',pm.response.json().id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "deleteCustomer",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/customers/{{disposableCustomerId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 204',()=>pm.response.to.have.status(204));",
+              "pm.test('No body',()=>pm.expect(pm.response.text()).to.eql('')); "
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "logout",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/sessions"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 204',()=>pm.response.to.have.status(204));",
+              "pm.test('No body',()=>pm.expect(pm.response.text()).to.eql('')); "
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "if(pm.info.iteration===0 && pm.info.requestName==='register')pm.collectionVariables.set('nonce',Date.now().toString());"
+        ]
+      }
+    }
+  ]
+}

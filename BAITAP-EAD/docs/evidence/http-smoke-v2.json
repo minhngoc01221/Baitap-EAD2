@@ -1,0 +1,263 @@
+{
+  "result": "PASS",
+  "requests": 15,
+  "checks": [
+    {
+      "method": "POST",
+      "path": "/sessions",
+      "status": 201,
+      "response": {
+        "token": "[hidden]",
+        "customer": {
+          "id": 3,
+          "name": "Quan tri vien",
+          "email": "admin@shop.local",
+          "address": "123 Nguyen Trai, TP HCM",
+          "phone": "0901000001"
+        },
+        "role": "ADMIN",
+        "expiresAt": "2026-10-16T21:27:48.857207Z"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/categories",
+      "status": 200,
+      "response": [
+        {
+          "id": 1,
+          "name": "Bàn phím",
+          "description": "Clothing & Tools"
+        },
+        {
+          "id": 2,
+          "name": "Âm thanh",
+          "description": "Clothing & Movies"
+        },
+        {
+          "id": 3,
+          "name": "Chuột & bàn di",
+          "description": "Baby & Music"
+        },
+        {
+          "id": 4,
+          "name": "Phụ kiện",
+          "description": "Games, Home & Music"
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/products",
+      "status": 201,
+      "response": {
+        "id": 24,
+        "name": "Smoke Keyboard",
+        "description": "Smoke test v2",
+        "price": 750000,
+        "stock": 5,
+        "categoryId": 1,
+        "imageUrl": "/images/keyboard.svg",
+        "categoryName": "Bàn phím"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/registrations",
+      "status": 201,
+      "response": {
+        "token": "[hidden]",
+        "customer": {
+          "id": 19,
+          "name": "Smoke Customer",
+          "email": "smoke1792157268951798400@example.com",
+          "address": "123 Nguyen Trai",
+          "phone": "0901234567"
+        },
+        "role": "CUSTOMER",
+        "expiresAt": "2026-10-16T21:27:49.040485Z"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders",
+      "status": 201,
+      "response": {
+        "id": 7,
+        "customerId": 19,
+        "status": "PENDING",
+        "createdAt": "2026-10-16T13:27:49.0875434Z",
+        "total": 1500000.0,
+        "items": [
+          {
+            "productId": 24,
+            "productName": "Smoke Keyboard",
+            "quantity": 2,
+            "unitPrice": 750000.0,
+            "subtotal": 1500000.0
+          }
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/24",
+      "status": 200,
+      "response": {
+        "id": 24,
+        "name": "Smoke Keyboard",
+        "description": "Smoke test v2",
+        "price": 750000.0,
+        "stock": 3,
+        "categoryId": 1,
+        "imageUrl": "/images/keyboard.svg",
+        "categoryName": "Bàn phím"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/19/orders",
+      "status": 200,
+      "response": {
+        "content": [
+          {
+            "id": 7,
+            "customerId": 19,
+            "status": "PENDING",
+            "createdAt": "2026-10-16T13:27:49.087543Z",
+            "total": 1500000.0,
+            "items": [
+              {
+                "productId": 24,
+                "productName": "Smoke Keyboard",
+                "quantity": 2,
+                "unitPrice": 750000.0,
+                "subtotal": 1500000.0
+              }
+            ]
+          }
+        ],
+        "page": 0,
+        "size": 10,
+        "totalElements": 1,
+        "totalPages": 1
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orders/7",
+      "status": 200,
+      "response": {
+        "id": 7,
+        "customerId": 19,
+        "status": "CANCELLED",
+        "createdAt": "2026-10-16T13:27:49.087543Z",
+        "total": 1500000.0,
+        "items": [
+          {
+            "productId": 24,
+            "productName": "Smoke Keyboard",
+            "quantity": 2,
+            "unitPrice": 750000.0,
+            "subtotal": 1500000.0
+          }
+        ]
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/orders/7",
+      "status": 200,
+      "response": {
+        "id": 7,
+        "customerId": 19,
+        "status": "CANCELLED",
+        "createdAt": "2026-10-16T13:27:49.087543Z",
+        "total": 1500000.0,
+        "items": [
+          {
+            "productId": 24,
+            "productName": "Smoke Keyboard",
+            "quantity": 2,
+            "unitPrice": 750000.0,
+            "subtotal": 1500000.0
+          }
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products/24",
+      "status": 200,
+      "response": {
+        "id": 24,
+        "name": "Smoke Keyboard",
+        "description": "Smoke test v2",
+        "price": 750000.0,
+        "stock": 5,
+        "categoryId": 1,
+        "imageUrl": "/images/keyboard.svg",
+        "categoryName": "Bàn phím"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders",
+      "status": 422,
+      "response": {
+        "code": "ERR_STOCK_EMPTY",
+        "message": "Sản phẩm không đủ tồn kho: 24",
+        "details": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders",
+      "status": 403,
+      "response": {
+        "code": "FORBIDDEN",
+        "message": "Administrator access required",
+        "details": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/sessions",
+      "status": 204,
+      "response": null
+    },
+    {
+      "method": "GET",
+      "path": "/profiles/current",
+      "status": 401,
+      "response": {
+        "code": "UNAUTHORIZED",
+        "message": "Invalid session",
+        "details": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/products",
+      "status": 200,
+      "response": {
+        "content": [
+          {
+            "id": 1,
+            "name": "Nova Mechanical K75",
+            "description": "Ban phim co khong day",
+            "price": 750000,
+            "stock": 30,
+            "categoryId": 1,
+            "categoryName": "Ban phim",
+            "imageUrl": "/images/keyboard.svg"
+          }
+        ],
+        "page": 0,
+        "size": 10,
+        "totalElements": 1,
+        "totalPages": 1
+      }
+    }
+  ]
+}

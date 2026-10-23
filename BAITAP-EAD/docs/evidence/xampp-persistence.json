@@ -1,0 +1,10 @@
+{
+  "database": "XAMPP MariaDB 10.4.32, 127.0.0.1:3308",
+  "customerId": 20,
+  "productId": 25,
+  "orderId": 8,
+  "total": 125000.0,
+  "beforeRestart": "PASS",
+  "afterDatabaseAndBackendRestart": "PASS",
+  "stock": 2
+}

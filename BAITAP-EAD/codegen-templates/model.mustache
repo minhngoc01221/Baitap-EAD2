@@ -1,0 +1,44 @@
+package {{package}};
+
+import java.net.URI;
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
+import java.time.LocalDate;
+import java.util.*;
+import com.fasterxml.jackson.annotation.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+{{#imports}}import {{import}};
+{{/imports}}
+
+{{#models}}{{#model}}
+/** DTO bất biến sinh từ shop-api.yaml. Sửa hợp đồng/template, không sửa file sinh tự động. */
+@jakarta.annotation.Generated("org.openapitools.codegen.languages.SpringCodegen")
+public record {{classname}}(
+{{#vars}}    @JsonProperty("{{baseName}}") {{{datatypeWithEnum}}} {{name}}{{^-last}},{{/-last}}
+{{/vars}}) {
+    // Constructor rỗng hỗ trợ chuỗi fluent khi dựng response; mỗi lần gọi trả về record mới.
+    public {{classname}}() { this({{#vars}}null{{^-last}},{{/-last}}{{/vars}}); }
+
+    public {{classname}} {
+{{#vars}}{{#isArray}}        if ({{name}} != null) {{name}} = List.copyOf({{name}});
+{{/isArray}}{{/vars}}    }
+
+{{#vars}}{{#isEnum}}{{>enumClass}}{{/isEnum}}{{/vars}}
+
+{{#vars}}
+    // Getter tương thích interface/service và Bean Validation của Spring.
+    {{>beanValidation}}
+    public {{{datatypeWithEnum}}} {{getter}}() { return {{name}}; }
+    public {{classname}} {{name}}({{{datatypeWithEnum}}} value) { return with("{{name}}", value); }
+{{/vars}}
+
+    @SuppressWarnings("unchecked")
+    private {{classname}} with(String property, Object value) {
+        return new {{classname}}(
+{{#vars}}            property.equals("{{name}}") ? ({{{datatypeWithEnum}}}) value : this.{{name}}{{^-last}},{{/-last}}
+{{/vars}}        );
+    }
+}
+{{/model}}{{/models}}

@@ -1,0 +1,11 @@
+# XAMPP dùng MariaDB/MySQL. Điền biến môi trường nếu đã đổi cổng hoặc mật khẩu root.
+spring:
+  datasource:
+    url: jdbc:mariadb://127.0.0.1:${XAMPP_DB_PORT:3308}/shop_api?createDatabaseIfNotExist=true&connectionTimeZone=UTC&sslMode=disable
+    username: ${XAMPP_DB_USER:root}
+    password: ${XAMPP_DB_PASSWORD:}
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+      # Giữ dữ liệu khi tắt/chạy lại; không dùng create hoặc create-drop với XAMPP.
+      ddl-auto: update

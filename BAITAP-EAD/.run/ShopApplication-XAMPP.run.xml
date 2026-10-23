@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ShopApplication-XAMPP" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="vn.edu.ead.shop.ShopApplication" />
+    <module name="shop-api" />
+    <option name="VM_PARAMETERS" value="-Dspring.profiles.active=xampp" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <method v="2"><option name="Make" enabled="true" /></method>
+  </configuration>
+</component>

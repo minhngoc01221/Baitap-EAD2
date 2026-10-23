@@ -1,0 +1,9 @@
+target/
+.tools/
+tmp/
+.idea/
+*.iml
+.env
+node_modules/
+tmp-*.log
+output/*.zip

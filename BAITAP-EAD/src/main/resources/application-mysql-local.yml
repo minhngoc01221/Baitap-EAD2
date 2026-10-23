@@ -1,0 +1,8 @@
+# MySQL riêng đã tạo để chạy thử trên máy này; không dùng H2.
+# Máy chủ MySQL dùng thư mục dữ liệu .tools/mysql-data và cổng 3307.
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3307/shop_api?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false
+    username: shop
+    password: shop
+    driver-class-name: com.mysql.cj.jdbc.Driver

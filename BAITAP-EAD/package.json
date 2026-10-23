@@ -1,0 +1,11 @@
+{
+  "name": "shop-api-mock",
+  "private": true,
+  "scripts": {
+    "mock": "prism mock -h 127.0.0.1 -p 4010 src/main/resources/shop-api.yaml",
+    "ui": "node scripts/serve-ui.cjs",
+    "test:contract": "newman run tests/contracts/shop-api.postman_collection.json --reporters cli,json --reporter-json-export docs/evidence/contract-newman.json",
+    "test:contract:backend": "newman run tests/contracts/shop-backend.postman_collection.json --reporters cli,json --reporter-json-export docs/evidence/contract-backend-newman.json"
+  },
+  "devDependencies": { "@stoplight/prism-cli": "5.14.2", "newman": "6.2.1" }
+}
